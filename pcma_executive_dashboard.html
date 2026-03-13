@@ -776,6 +776,7 @@ async function tryLiveData() {
 // INIT - render immediately, no waiting
 // ===================================================
 buildSections();
+buildComposite();
 // Then check for live JSON in background
 setTimeout(tryLiveData, 1000);
 setInterval(tryLiveData, 30000);
