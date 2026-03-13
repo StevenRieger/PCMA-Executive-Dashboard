@@ -795,23 +795,23 @@ async function tryLiveData() {
     const res = await fetch(DATA_URL + '?t=' + Date.now());
     if (!res.ok) throw new Error('not found');
     const live = await res.json();
-    if (live && live.sections) {
-      // Merge live numeric values into DATA
-      live.sections.forEach(liveSec => {
-        const sec = DATA.sections.find(s => s.id === liveSec.id);
-        if (!sec || !liveSec.metrics) return;
-        liveSec.metrics.forEach((lm, i) => {
-          if (sec.metrics[i] && lm.ytd !== undefined) sec.metrics[i].ytd = lm.ytd;
-          if (sec.metrics[i] && lm.yl) sec.metrics[i].yl = lm.yl;
-        });
+    if (!live || !live.sections) throw new Error('no data');
+    // Only re-render if generated_at has changed
+    if (live.generated_at === document.getElementById('updatedLbl').textContent) return;
+    live.sections.forEach(liveSec => {
+      const sec = DATA.sections.find(s => s.id === liveSec.id);
+      if (!sec || !liveSec.metrics) return;
+      liveSec.metrics.forEach((lm, i) => {
+        if (sec.metrics[i] && lm.ytd !== undefined) sec.metrics[i].ytd = lm.ytd;
+        if (sec.metrics[i] && lm.yl) sec.metrics[i].yl = lm.yl;
       });
-      if (live.generated_at) document.getElementById('updatedLbl').textContent = live.generated_at;
-      buildSections();
-      buildComposite();
-      document.getElementById('liveStatus').textContent = 'Live Data';
-    }
+    });
+    if (live.generated_at) document.getElementById('updatedLbl').textContent = live.generated_at;
+    buildSections();
+    buildComposite();
+    document.getElementById('liveStatus').textContent = 'Live Data';
   } catch {
-    // Keep showing static data - no error shown to user
+    // Keep showing static data - no flicker, no re-render
     document.getElementById('liveStatus').textContent = 'Static Mode';
   }
 }
