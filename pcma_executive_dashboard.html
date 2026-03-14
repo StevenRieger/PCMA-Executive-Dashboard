@@ -250,20 +250,51 @@ main { padding: 1.2rem 2rem; display: flex; flex-direction: column; gap: 0.9rem;
   .th-wt{ white-space:nowrap; }
 
   /* Section body padding */
-  .sbody{ padding:.75rem .9rem; }
+  .sbody{ padding:.75rem .9rem; min-width:0; overflow:hidden; }
 
   /* KPI cards: 2 per row on mobile */
   .kcard{ min-width:calc(50% - .5rem); max-width:calc(50% - .25rem); }
   .kval{ font-size:1.05rem; }
 
   /* Main padding */
-  main{ padding:.75rem 1rem; gap:.65rem; }
+  main{ padding:.75rem .6rem; gap:.65rem; }
 
   /* Drill charts: single column */
   .charts-grid{ grid-template-columns:1fr; }
 
   /* Banner */
   .composite-banner{ padding:.5rem 1rem; }
+
+  /* Prevent ALL overflow on mobile */
+  body{ overflow-x:hidden; }
+  .srow{ overflow:hidden; min-width:0; }
+
+  /* Section header - allow wrapping */
+  .shdr{ flex-wrap:wrap; gap:.35rem; }
+  .swt{ margin-left:0; width:100%; font-size:.56rem; }
+  .stitle{ font-size:.82rem; }
+  .sscore{ font-size:.56rem; }
+
+  /* Text in metric lines - wrap properly */
+  .mline{ font-size:.68rem; flex-wrap:wrap; word-break:break-word; }
+  .col-hd{ font-size:.52rem; }
+
+  /* Two col - add breathing room */
+  .two-col{ gap:.6rem 0; }
+
+  /* Source tags wrap */
+  .src-row{ flex-wrap:wrap; }
+  .src-tag{ font-size:.5rem; }
+
+  /* Checklist text */
+  .ci{ font-size:.66rem; }
+
+  /* Drill button */
+  .drill-btn{ font-size:.56rem; padding:.22rem .55rem; }
+
+  /* KPI name smaller */
+  .kname{ font-size:.5rem; }
+  .kpct{ font-size:.58rem; }
 }
 
 @media(max-width:400px){
