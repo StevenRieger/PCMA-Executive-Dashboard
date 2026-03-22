@@ -238,7 +238,7 @@ footer strong { color: #6B1044; }
 // =======================================================
 // CONFIG
 // =======================================================
-const DATA_URL = 'dashboard_data.json';
+const DATA_URL = 'https://pcma2.sharepoint.com/:u:/s/PCMATeam/IQBEqCkLIsipRZL3HNVzUc0hATvoDGYC20_iBx-K60hIlHU?e=2ufRsW&download=1';
 
 // =======================================================
 const DATA = {
@@ -251,8 +251,8 @@ const DATA = {
       color: '#590044',
       light: '#F5EAF2',
       metrics: [
-        { name: 'PCMA Net Profit',       goal: 705000,  ytd: 125000, gl: '$705K',       yl: '$125K',     fmt: 'currency', src: 'Kim Maggio' },
-        { name: 'Foundation Net Profit', goal: 937000,  ytd: null,   gl: '$937K',       yl: 'Pending',   fmt: 'currency', src: 'Kim Maggio', status: 'Pending' }
+        { name: 'PCMA Net Profit',       goal: 705000,  ytd: 705000, gl: '$705K',       yl: '705,000',   fmt: 'currency', src: 'Kim Maggio' },
+        { name: 'Foundation Net Profit', goal: 937000,  ytd: 937,    gl: '$937K',       yl: '937',       fmt: 'currency', src: 'Kim Maggio' }
       ]
     },
     {
@@ -722,16 +722,32 @@ async function tryLiveData() {
     document.getElementById('liveStatus').textContent = 'Live Data';
   } catch(e) {
     console.log('Live data error:', e);
-    document.getElementById('liveStatus').textContent = 'Static Mode';
+    document.getElementById('liveStatus').textContent = 'Data Error';
+    // Show error banner
+    const existing = document.getElementById('dataErrorBanner');
+    if (!existing) {
+      const banner = document.createElement('div');
+      banner.id = 'dataErrorBanner';
+      banner.style.cssText = 'background:#C0143C;color:#fff;text-align:center;padding:.65rem 1.5rem;font-size:.8rem;font-weight:600;font-family:Aptos,Segoe UI,Arial,sans-serif;position:sticky;top:72px;z-index:199;';
+      banner.innerHTML = '&#9888; Dashboard data could not be loaded from SharePoint. Please refresh or contact Enterprise Systems & Technology. &nbsp;<button onclick="tryLiveData()" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.5);color:#fff;border-radius:4px;padding:2px 10px;cursor:pointer;font-size:.75rem;font-family:inherit;">Retry</button>';
+      document.body.insertBefore(banner, document.getElementById('mainContent'));
+    }
   }
 }
 
 // =======================================================
-// INIT
+// INIT - show loading state, then fetch live data
 // =======================================================
-buildDashboard();
-buildComposite();
-setTimeout(tryLiveData, 1000);
+function showLoadingState() {
+  const main = document.getElementById('mainContent');
+  main.innerHTML = '<div style="text-align:center;padding:4rem 2rem;font-family:Aptos,Segoe UI,Arial,sans-serif;color:#888;"><div style="font-size:1.1rem;font-weight:600;color:#590044;margin-bottom:.5rem;">Loading dashboard data...</div><div style="font-size:.75rem;">Connecting to SharePoint</div></div>';
+  document.getElementById('compositeHdr').textContent = '—';
+  document.getElementById('updatedLbl').textContent = '—';
+  document.getElementById('liveStatus').textContent = 'Loading';
+}
+
+showLoadingState();
+setTimeout(tryLiveData, 800);
 setInterval(tryLiveData, 30000);
 
 </script>
