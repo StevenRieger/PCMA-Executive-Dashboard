@@ -420,7 +420,12 @@ function buildDashboard() {
         barW = Math.min(100, pct);
         barColor = pColor(pct, m.inverse, m.threshold, m.ytd, m.goal);
         cc = chipClass(pct, m.inverse, m.exceeds, m.threshold, m.ytd, m.goal);
-        pctLabel = m.exceeds ? 'Exceeds!' : m.inverse ? (m.ytd <= m.goal ? 'On target' : 'Over limit') : (pct >= 100 ? 'Goal met!' : pct + '%');
+        if (m.threshold) {
+          pctLabel = m.inverse ? (m.ytd <= m.goal ? 'Met' : 'Not Met') : (m.ytd >= m.goal ? 'Met' : 'Not Met');
+          barW = 100; // full width solid bar
+        } else {
+          pctLabel = m.exceeds ? 'Exceeds!' : m.inverse ? (m.ytd <= m.goal ? 'On target' : 'Over limit') : (pct >= 100 ? 'Goal met!' : pct + '%');
+        }
       } else if (m.status) {
         pctLabel = m.status;
         cc = 'chip-na';
