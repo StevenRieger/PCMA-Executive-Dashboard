@@ -423,7 +423,12 @@ function buildDashboard() {
       cubesHTML += `
         <div class="cube" style="--sec-color:${sec.color};--sec-light:${sec.light}">
           <div class="cube-name">${m.name}</div>
-          <div class="cube-val">${m.yl || '—'}</div>
+          <div class="cube-val">${(() => {
+            const v = m.yl;
+            if (!v && v !== 0) return '—';
+            if (typeof v === 'number' && v % 1 !== 0) return parseFloat(v.toFixed(2));
+            return v;
+          })()}</div>
           <div class="cube-goal">Goal: ${m.gl}</div>
           <div class="cube-divider"></div>
           <div class="cube-pct-row">
@@ -660,10 +665,11 @@ function parseExcelRows(rows) {
       let ytdLabel = rawYtd;
       if (rawYtd && rawYtd !== '?' && rawYtd !== '' && !isNaN(parseFloat(rawYtd))) {
         ytdNum = parseFloat(rawYtd);
-        // Format nicely
+        // Format nicely - round all decimals to max 2 places
         if (ytdNum >= 1000000) ytdLabel = '$' + (ytdNum/1000000).toFixed(2) + 'M';
-        else if (ytdNum >= 1000) ytdLabel = ytdNum.toLocaleString();
-        else if (rawYtd.includes('.') && ytdNum < 1) ytdLabel = Math.round(ytdNum * 100) + '%';
+        else if (ytdNum >= 1000) ytdLabel = Math.round(ytdNum).toLocaleString();
+        else if (rawYtd.includes('.') && ytdNum < 1) ytdLabel = parseFloat((ytdNum * 100).toFixed(2)) + '%';
+        else if (ytdNum % 1 !== 0) ytdLabel = parseFloat(ytdNum.toFixed(2)).toString();
         else ytdLabel = ytdNum.toString();
       }
 
