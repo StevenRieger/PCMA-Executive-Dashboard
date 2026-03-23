@@ -342,7 +342,7 @@ function secAvg(sec) {
   const vals = [];
   sec.metrics.forEach(m => {
     if (m.goal == null || m.ytd == null || typeof m.ytd !== 'number') return;
-    if (m.inverse) vals.push(m.ytd <= m.goal ? 100 : Math.max(0, 100 - Math.round((m.ytd / m.goal - 1) * 200)));
+    if (m.inverse) vals.push(m.ytd <= m.goal ? 100 : Math.max(0, Math.round((m.goal / m.ytd) * 100)));
     else vals.push(Math.min(100, Math.round((m.ytd / m.goal) * 100)));
   });
   return vals.length ? Math.round(vals.reduce((a, b) => a + b, 0) / vals.length) : null;
@@ -407,7 +407,7 @@ function buildDashboard() {
       let pct = null, pctLabel = '', cc = 'chip-na', barColor = '#CCC', barW = 0;
       if (m.goal && m.ytd != null && typeof m.ytd === 'number' && m.fmt !== 'qualitative') {
         pct = m.inverse
-          ? (m.ytd <= m.goal ? 100 : Math.max(0, 100 - Math.round((m.ytd/m.goal-1)*200)))
+          ? (m.ytd <= m.goal ? 100 : Math.max(0, Math.round((m.goal/m.ytd)*100)))
           : Math.min(150, Math.round((m.ytd/m.goal)*100));
         barW = Math.min(100, pct);
         barColor = pColor(pct, m.inverse);
@@ -447,7 +447,7 @@ function buildDashboard() {
       let pTag = '';
       if (m.goal && m.ytd != null && typeof m.ytd === 'number') {
         const p = m.inverse
-          ? (m.ytd <= m.goal ? 100 : Math.max(0, 100-Math.round((m.ytd/m.goal-1)*200)))
+          ? (m.ytd <= m.goal ? 100 : Math.max(0, Math.round((m.goal / m.ytd) * 100)))
           : Math.min(150, Math.round((m.ytd/m.goal)*100));
         const pc = pColor(p, m.inverse);
         const pl = m.inverse ? (m.ytd <= m.goal ? 'On target' : 'Over') : (p >= 100 ? 'Goal met!' : p + '%');
@@ -535,7 +535,7 @@ function buildDashboard() {
       sec.metrics.forEach((m, idx) => {
         if (m.goal && m.ytd != null && typeof m.ytd === 'number') {
           const pct = m.inverse
-            ? (m.ytd <= m.goal ? 100 : Math.max(0, 100 - Math.round((m.ytd/m.goal-1)*200)))
+            ? (m.ytd <= m.goal ? 100 : Math.max(0, Math.round((m.goal / m.ytd) * 100)))
             : Math.min(100, Math.round((m.ytd/m.goal)*100));
           const el = document.getElementById(`minibar-${sec.id}-${idx}`);
           if (el) el.style.width = pct + '%';
