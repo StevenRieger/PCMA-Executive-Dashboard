@@ -671,6 +671,8 @@ function parseExcelRows(rows) {
     // Metric row - must have a name or a goal/ytd value
     if (parsed.length && (rawName || rawGoal || rawYtd)) {
       const cleanName = rawName.replace(/^[•\s\-]+/, '').trim();
+      // Skip rows that have a name but no goal AND no ytd - these are sub-headers
+      if (cleanName && !rawGoal && !rawYtd) return;
       if (!cleanName && !rawGoal && !rawYtd) return; // skip blank rows
 
       // Parse numeric YTD
