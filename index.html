@@ -445,7 +445,7 @@ function buildDashboard() {
           <div class="cube-goal">Goal: ${m.gl}</div>
           <div class="cube-divider"></div>
           <div class="cube-pct-row">
-            <span class="cube-pct" style="color:${pct!=null?barColor:'#888'}">${pct!=null?Math.min(150,pct)+'%':'—'}</span>
+            ${!m.threshold ? `<span class="cube-pct" style="color:${pct!=null?barColor:'#888'}">${pct!=null?Math.min(150,pct)+'%':'—'}</span>` : ''}
             <span class="cube-chip ${cc}">${pctLabel}</span>
           </div>
           <div class="cube-mini-bar"><div class="cube-mini-fill" id="minibar-${sec.id}-${idx}" style="width:0%;background:${barColor}"></div></div>
