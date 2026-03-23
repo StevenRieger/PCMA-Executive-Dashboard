@@ -309,8 +309,8 @@ const DATA = {
       color: '#6F004F',
       light: '#F2E8F0',
       metrics: [
-        { name: 'Voluntary Turnover',           goal: 20, ytd: 1.45, gl: '< 20%',  yl: '1.45%',  fmt: 'percent', src: 'Gina', inverse: true },
-        { name: 'Employee Engagement',          goal: 77, ytd: 64.29, gl: '>= 77%', yl: '64.29%', fmt: 'percent', src: 'Gina' },
+        { name: 'Voluntary Turnover',           goal: 20, ytd: 1.45, gl: '< 20%',  yl: '1.45%',  fmt: 'percent', src: 'Gina', inverse: true, threshold: true },
+        { name: 'Employee Engagement',          goal: 77, ytd: 64.29, gl: '>= 77%', yl: '64.29%', fmt: 'percent', src: 'Gina', threshold: true },
         { name: 'Data & Technology Initiatives',goal: 6,  ytd: 3,    gl: '6 items',yl: '3 of 6', fmt: 'number',  src: 'IT Checklist',
           checklist: [
             { label: 'Dashboards & Reporting',       done: true  },
@@ -357,15 +357,23 @@ function compositeScore() {
   return wt ? Math.round(ws / wt) : 0;
 }
 
-function pColor(p, inverse) {
+function pColor(p, inverse, threshold, ytd, goal) {
   if (p == null) return '#888';
+  if (threshold) {
+    if (inverse) return (ytd <= goal) ? '#1E9B6B' : '#C0143C';
+    return (ytd >= goal) ? '#1E9B6B' : '#C0143C';
+  }
   if (inverse) return p >= 80 ? '#1E9B6B' : '#E8A020';
   return p >= 80 ? '#1E9B6B' : p >= 40 ? '#E8A020' : '#C0143C';
 }
 
-function chipClass(p, inverse, exceeds) {
+function chipClass(p, inverse, exceeds, threshold, ytd, goal) {
   if (exceeds) return 'chip-exc';
   if (p == null) return 'chip-na';
+  if (threshold) {
+    if (inverse) return (ytd <= goal) ? 'chip-good' : 'chip-low';
+    return (ytd >= goal) ? 'chip-good' : 'chip-low';
+  }
   if (inverse) return p >= 80 ? 'chip-good' : 'chip-warn';
   return p >= 80 ? 'chip-good' : p >= 40 ? 'chip-warn' : 'chip-low';
 }
@@ -410,8 +418,8 @@ function buildDashboard() {
           ? (m.ytd <= m.goal ? 100 : Math.max(0, Math.round((m.goal/m.ytd)*100)))
           : Math.min(150, Math.round((m.ytd/m.goal)*100));
         barW = Math.min(100, pct);
-        barColor = pColor(pct, m.inverse);
-        cc = chipClass(pct, m.inverse, m.exceeds);
+        barColor = pColor(pct, m.inverse, m.threshold, m.ytd, m.goal);
+        cc = chipClass(pct, m.inverse, m.exceeds, m.threshold, m.ytd, m.goal);
         pctLabel = m.exceeds ? 'Exceeds!' : m.inverse ? (m.ytd <= m.goal ? 'On target' : 'Over limit') : (pct >= 100 ? 'Goal met!' : pct + '%');
       } else if (m.status) {
         pctLabel = m.status;
@@ -454,7 +462,7 @@ function buildDashboard() {
         const p = m.inverse
           ? (m.ytd <= m.goal ? 100 : Math.max(0, Math.round((m.goal / m.ytd) * 100)))
           : Math.min(150, Math.round((m.ytd/m.goal)*100));
-        const pc = pColor(p, m.inverse);
+        const pc = pColor(p, m.inverse, m.threshold, m.ytd, m.goal);
         const pl = m.inverse ? (m.ytd <= m.goal ? 'On target' : 'Over') : (p >= 100 ? 'Goal met!' : p + '%');
         pTag = `<span style="font-size:.58rem;font-weight:700;color:${pc};margin-left:4px">${pl}</span>`;
       }
