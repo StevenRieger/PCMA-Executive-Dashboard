@@ -221,6 +221,13 @@ footer strong { color: #6B1044; }
 </header>
 
 <div class="composite-banner"></div>
+<!-- ===== COLOR KEY ===== -->
+<div class="color-key" style="background:#fff;border-bottom:1px solid #E0D5DC;padding:.5rem 1.8rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+  <span style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#590044;">Goal Progress:</span>
+  <span style="font-size:.65rem;font-weight:700;color:#fff;padding:.28rem .85rem;border-radius:20px;white-space:nowrap;" style="background:#1E9B6B">&ge; 80%</span>
+  <span style="font-size:.65rem;font-weight:700;color:#fff;padding:.28rem .85rem;border-radius:20px;white-space:nowrap;" style="background:#E8A020">40 - 79%</span>
+  <span style="font-size:.65rem;font-weight:700;color:#fff;padding:.28rem .85rem;border-radius:20px;white-space:nowrap;" style="background:#C0143C">&lt; 40%</span>
+</div>
 
 <main id="mainContent"></main>
 
@@ -288,10 +295,10 @@ const DATA = {
       metrics: [
         { name: 'Spark Subscribers',            goal: 15000, ytd: 14182, gl: '15,000', yl: '14,182', fmt: 'number', src: 'Chantal' },
         { name: 'Destinaitor Paid Subscribers', goal: 50,    ytd: 10,    gl: '50',     yl: '10',     fmt: 'number', src: 'Salesforce' },
+        { name: 'C4C Competition Launch',       goal: null,  ytd: null,  gl: '2 awards', yl: 'Launch at IMES Frankfurt', fmt: 'qualitative', src: 'Tonya', status: 'In Progress' },
+        { name: 'C4C Advisory Board Launch',    goal: null,  ytd: null,  gl: 'Launch 2026', yl: 'Finalizing w/ SANCBE', fmt: 'qualitative', src: 'Tonya', status: 'In Progress' },
         { name: 'Learning Participants',        goal: 2000,  ytd: 228,   gl: '2,000',  yl: '228',    fmt: 'number', src: 'Tammy' },
-        { name: 'Digital Convene Subscriptions',goal: 7500,  ytd: 4874,  gl: '7,500',  yl: '4,874',  fmt: 'number', src: 'Irina' },
-        { name: 'C4C Competition Launch',       goal: null,  ytd: null,  gl: '2 awards', yl: 'Launch at IMEX Frankfurt', fmt: 'qualitative', src: 'Tonya', status: 'In Progress' },
-        { name: 'C4C Advisory Board Launch',    goal: null,  ytd: null,  gl: 'Launch 2026', yl: 'Finalizing w/ SANCBE', fmt: 'qualitative', src: 'Tonya', status: 'In Progress' }
+        { name: 'Digital Convene Subscriptions',goal: 7500,  ytd: 4874,  gl: '7,500',  yl: '4,874',  fmt: 'number', src: 'Irina' }
       ]
     },
     {
