@@ -259,8 +259,8 @@ const DATA = {
       color: '#590044',
       light: '#F5EAF2',
       metrics: [
-        { name: 'PCMA Net Operating Income',       goal: 705309,  ytd: 3719694, gl: '$705,309',  yl: '$3,719,694', fmt: 'currency', src: 'Kim' },
-        { name: 'Foundation Net Operating Income', goal: 936590,  ytd: 253031,  gl: '$936,590',  yl: '$253,031',   fmt: 'currency', src: 'Kim' }
+        { name: 'PCMA Net Operating Income',       goal: 705309,  ytd: 3719694, budget: 3638928, variance: 80766,  gl: '$705,309',  yl: '$3,719,694', fmt: 'currency', src: 'Kim' },
+        { name: 'Foundation Net Operating Income', goal: 936590,  ytd: 253031,  budget: 221928,  variance: 31103,  gl: '$936,590',  yl: '$253,031',   fmt: 'currency', src: 'Kim' }
       ]
     },
     {
@@ -442,7 +442,9 @@ function buildDashboard() {
             if (typeof v === 'number' && v % 1 !== 0) return parseFloat(v.toFixed(2));
             return v;
           })()}</div>
+          ${m.budget != null ? `<div class="cube-goal" style="font-size:.54rem;color:#666;">Budget: $${Math.round(m.budget).toLocaleString()}</div>` : ''}
           <div class="cube-goal">Goal: ${m.gl}</div>
+          ${m.variance != null ? `<div class="cube-goal" style="font-size:.58rem;font-weight:700;color:${m.variance >= 0 ? '#1E9B6B' : '#C0143C'};">Variance: ${m.variance >= 0 ? '+' : ''}$${Math.round(m.variance).toLocaleString()}</div>` : ''}
           <div class="cube-divider"></div>
           <div class="cube-pct-row">
             ${!m.threshold ? `<span class="cube-pct" style="color:${pct!=null?barColor:'#888'}">${pct!=null?Math.min(150,pct)+'%':'—'}</span>` : ''}
@@ -641,8 +643,8 @@ function parseExcelRows(rows) {
 
   // Map name fragments to section + metric index
   const NAME_MAP = [
-    { frag: 'Consolidated 2026 Net Operating Income',  sec: 'financial',  idx: 0, ytdFrom: 'Consolidated February 2026 YTD Net Operating Income Actual' },
-    { frag: 'Foundation: Consolidated 2026',           sec: 'financial',  idx: 1, ytdFrom: 'Foundation: Consolidated February 2026 YTD Net Operating Income Actual' },
+    { frag: 'PCMA: Consolidated 2026 Net Operating Income',        sec: 'financial',  idx: 0, actualFrag: 'PCMA: Consolidated February 2026 YTD Net Operating Income Actual', budgetFrag: 'PCMA: Consolidated February 2026 YTD Net Operating Income Budget', varianceFrag: 'PCMA: Consolidated February 2026 YTD Net Operating Income Variance' },
+    { frag: 'Foundation: Consolidated 2026 Net Operating Income',  sec: 'financial',  idx: 1, actualFrag: 'Foundation: Consolidated February 2026 YTD Net Operating Income Actual', budgetFrag: 'Foundation: Consolidated February 2026 YTD Net Operating Income Budget', varianceFrag: 'Foundation: Consolidated February 2026 YTD Net Operating Income Variance' },
     { frag: 'Membership: 10,000',                      sec: 'membership', idx: 0 },
     { frag: 'EMEA',                                    sec: 'membership', idx: 1 },
     { frag: 'Community',                               sec: 'membership', idx: 2 },
@@ -676,7 +678,7 @@ function parseExcelRows(rows) {
     const rawGoal = (row[GOAL_COL] || '').toString().trim();
     const rawYtd  = (row[YTD_COL]  || '').toString().trim();
 
-    NAME_MAP.forEach(({ frag, sec, idx, ytdFrom }) => {
+    NAME_MAP.forEach((map) => { const { frag, sec, idx } = map;
       if (!rawName.includes(frag)) return;
       const key = sec + '_' + idx;
       if (updates[key]) return; // first match wins for goal row
@@ -685,11 +687,16 @@ function parseExcelRows(rows) {
       let goalNum = null;
       if (rawGoal && !isNaN(parseFloat(rawGoal))) goalNum = parseFloat(rawGoal);
 
-      // Parse YTD - if this is a goal row with a separate actual row, use that
+      // Parse YTD - look up actual, budget, variance rows by exact fragment
       let ytdSource = rawYtd;
-      if (ytdFrom) {
-        const actualRow = Object.entries(rowByName).find(([k]) => k.includes(ytdFrom.split(' ').slice(-3).join(' ')));
-        if (actualRow) ytdSource = (actualRow[1][YTD_COL] || '').toString().trim();
+      let budgetNum = null, varianceNum = null;
+      if (map.actualFrag) {
+        const actualRow = rowByName[map.actualFrag];
+        if (actualRow) ytdSource = (actualRow[YTD_COL] || '').toString().trim();
+        const budgetRow = rowByName[map.budgetFrag];
+        if (budgetRow) budgetNum = parseFloat((budgetRow[YTD_COL] || '').toString().trim()) || null;
+        const varianceRow = rowByName[map.varianceFrag];
+        if (varianceRow) varianceNum = parseFloat((varianceRow[YTD_COL] || '').toString().trim()) || null;
       }
 
       let ytdNum = null, ytdLabel = ytdSource;
@@ -710,7 +717,7 @@ function parseExcelRows(rows) {
         }
       }
 
-      updates[key] = { ytd: ytdNum, yl: ytdLabel || ytdSource || null, goal: goalNum };
+      updates[key] = { ytd: ytdNum, yl: ytdLabel || ytdSource || null, goal: goalNum, budget: budgetNum, variance: varianceNum };
     });
   });
 
