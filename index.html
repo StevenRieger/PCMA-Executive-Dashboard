@@ -250,7 +250,7 @@ const DATA_URL = 'dashboard_data.json';
 
 // =======================================================
 const DATA = {
-  generated_at: 'Feb 27, 2026',
+  generated_at: 'Mar 24, 2026 10:42',
   sections: [
     {
       id: 'financial',
@@ -259,8 +259,8 @@ const DATA = {
       color: '#590044',
       light: '#F5EAF2',
       metrics: [
-        { name: 'PCMA Net Profit',       goal: 705000,  ytd: 705000, gl: '$705K',       yl: '705,000',   fmt: 'currency', src: 'Kim Maggio' },
-        { name: 'Foundation Net Profit', goal: 937000,  ytd: 937,    gl: '$937K',       yl: '937',       fmt: 'currency', src: 'Kim Maggio' }
+        { name: 'PCMA Net Operating Income',       goal: 705309,  ytd: 3719694, gl: '$705,309',  yl: '$3,719,694', fmt: 'currency', src: 'Kim' },
+        { name: 'Foundation Net Operating Income', goal: 936590,  ytd: 253031,  gl: '$936,590',  yl: '$253,031',   fmt: 'currency', src: 'Kim' }
       ]
     },
     {
@@ -270,21 +270,21 @@ const DATA = {
       color: '#6F004F',
       light: '#F2E8F0',
       metrics: [
-        { name: 'Membership',               goal: 10000,   ytd: 9049,   gl: '10,000', yl: '9,049',   fmt: 'number',  src: 'Salesforce' },
-        { name: 'Community',                goal: 65000,   ytd: 53108,  gl: '65,000', yl: '53,108',  fmt: 'number',  src: 'Salesforce' },
-        { name: 'Audience',                 goal: 1200000, ytd: 377075, gl: '1.2M',   yl: '377,075', fmt: 'number',  src: 'Salesforce' },
-        { name: 'CL Attendance YoY Growth', goal: 5,       ytd: 9,      gl: '5%',     yl: '9%',      fmt: 'percent', src: 'Events', exceeds: true },
-        { name: 'EMEA/APAC/LATAM Growth',   goal: null,    ytd: null,   gl: '10%',    yl: 'TBD',     fmt: 'percent', src: 'Salesforce', status: 'TBD' }
+        { name: 'Membership',               goal: 10000,   ytd: 9049,   gl: '10,000',  yl: '9,049',   fmt: 'number',  src: 'Salesforce' },
+        { name: 'EMEA/APAC/LATAM Growth',   goal: 1000,    ytd: 100,    gl: '1,000',   yl: '100',     fmt: 'number',  src: 'Salesforce' },
+        { name: 'Community',                goal: 65000,   ytd: 53108,  gl: '65,000',  yl: '53,108',  fmt: 'number',  src: 'Salesforce' },
+        { name: 'Audience',                 goal: 1200000, ytd: 377075, gl: '1.2M',    yl: '377,075', fmt: 'number',  src: 'Salesforce' },
+        { name: 'CL Attendance',            goal: 10000,   ytd: 100500, gl: '10,000',  yl: '100,500', fmt: 'number',  src: 'Events', exceeds: true }
       ]
     },
     {
       id: 'endowment',
       title: 'BE The Future Endowment Campaign',
       weight: 10,
-      color: '#6F004F',
-      light: '#F2E8F0',
+      color: '#590044',
+      light: '#F5EAF2',
       metrics: [
-        { name: 'Raise $1M by End of 2026', goal: 1000000, ytd: null, gl: '$1,000,000', yl: 'Quiet Phase', fmt: 'currency', src: 'Kim Maggio', status: 'Quiet Phase' }
+        { name: 'Raise $1M by End of 2026', goal: 1000000, ytd: null, gl: '$1,000,000', yl: 'Quiet Phase', fmt: 'currency', src: 'Kim', status: 'Quiet Phase' }
       ]
     },
     {
@@ -294,12 +294,12 @@ const DATA = {
       color: '#6F004F',
       light: '#F2E8F0',
       metrics: [
-        { name: 'Spark Subscribers',            goal: 15000, ytd: 14182, gl: '15,000', yl: '14,182', fmt: 'number', src: 'Chantal' },
-        { name: 'Destinaitor Paid Subscribers', goal: 50,    ytd: 10,    gl: '50',     yl: '10',     fmt: 'number', src: 'Salesforce' },
-        { name: 'C4C Competition Launch',       goal: null,  ytd: null,  gl: '2 awards', yl: 'Launch at IMES Frankfurt', fmt: 'qualitative', src: 'Tonya', status: 'In Progress' },
-        { name: 'C4C Advisory Board Launch',    goal: null,  ytd: null,  gl: 'Launch 2026', yl: 'Finalizing w/ SANCBE', fmt: 'qualitative', src: 'Tonya', status: 'In Progress' },
-        { name: 'Learning Participants',        goal: 2000,  ytd: 228,   gl: '2,000',  yl: '228',    fmt: 'number', src: 'Tammy' },
-        { name: 'Digital Convene Subscriptions',goal: 7500,  ytd: 4874,  gl: '7,500',  yl: '4,874',  fmt: 'number', src: 'Irina' }
+        { name: 'Spark Subscribers',            goal: 15000, ytd: 14182, gl: '15,000',    yl: '14,182', fmt: 'number', src: 'Chantal' },
+        { name: 'Destinaitor Paid Subscribers', goal: 50,    ytd: 10,    gl: '50',        yl: '10',     fmt: 'number', src: 'Salesforce' },
+        { name: 'C4C Competition Launch',       goal: 2,     ytd: 1,     gl: '2 awards',  yl: '1',      fmt: 'number', src: 'Tonya' },
+        { name: 'C4C Advisory Board Launch',    goal: 1,     ytd: 1,     gl: 'Launch 2026', yl: '1',    fmt: 'number', src: 'Tonya' },
+        { name: 'Learning Participants',        goal: 2000,  ytd: 382,   gl: '2,000',     yl: '382',    fmt: 'number', src: 'Tammy' },
+        { name: 'Digital Convene Subscriptions',goal: 7500,  ytd: 4761,  gl: '7,500',     yl: '4,761',  fmt: 'number', src: 'Irina' }
       ]
     },
     {
@@ -309,9 +309,9 @@ const DATA = {
       color: '#6F004F',
       light: '#F2E8F0',
       metrics: [
-        { name: 'Voluntary Turnover',           goal: 20, ytd: 1.45, gl: '< 20%',  yl: '1.45%',  fmt: 'percent', src: 'Gina', inverse: true, threshold: true },
-        { name: 'Employee Engagement',          goal: 77, ytd: 64.29, gl: '>= 77%', yl: '64.29%', fmt: 'percent', src: 'Gina', threshold: true },
-        { name: 'Data & Technology Initiatives',goal: 6,  ytd: 3,    gl: '6 items',yl: '3 of 6', fmt: 'number',  src: 'IT Checklist',
+        { name: 'Voluntary Turnover',           goal: 20, ytd: 10,  gl: '< 20%',   yl: '10%',  fmt: 'percent', src: 'Gina', inverse: true, threshold: true },
+        { name: 'Employee Engagement',          goal: 77, ytd: 78,  gl: '>= 77%',  yl: '78%',  fmt: 'percent', src: 'Gina', threshold: true },
+        { name: 'Data & Technology Initiatives',goal: 6,  ytd: 3,   gl: '6 items', yl: '3 of 6', fmt: 'number', src: 'IT Checklist',
           checklist: [
             { label: 'Dashboards & Reporting',       done: true  },
             { label: 'Standardized Data Management', done: false },
@@ -324,7 +324,7 @@ const DATA = {
       ]
     }
   ]
-};
+}
 
 // =======================================================
 // HELPERS
@@ -631,81 +631,100 @@ function buildDetailCharts(secId) {
 // LIVE POLLING
 // =======================================================
 // =======================================================
-// EXCEL ROW PARSER - maps SharePoint JSON to DATA structure
+// =======================================================
+// EXCEL ROW PARSER - name-based matching (robust to row additions)
 // =======================================================
 function parseExcelRows(rows) {
-  // Column names from the Excel table
-  const NAME_COL   = 'Financial Results '; // trailing space in actual column name
-  const WEIGHT_COL = '20%';
+  const NAME_COL   = 'Financial Results ';
   const GOAL_COL   = 'GOAL';
   const YTD_COL    = 'YTD';
-  const SRC_COL    = 'Source Of Data';
 
-  // Section order matches DATA.sections order
-  const sectionOrder = ['financial','membership','endowment','education','internal'];
-  let sectionIdx = -1;
-  const parsed = [];  // array of { sectionId, metrics: [{name,goal,ytd,source}] }
+  // Map name fragments to section + metric index
+  const NAME_MAP = [
+    { frag: 'Consolidated 2026 Net Operating Income',  sec: 'financial',  idx: 0, ytdFrom: 'Consolidated February 2026 YTD Net Operating Income Actual' },
+    { frag: 'Foundation: Consolidated 2026',           sec: 'financial',  idx: 1, ytdFrom: 'Foundation: Consolidated February 2026 YTD Net Operating Income Actual' },
+    { frag: 'Membership: 10,000',                      sec: 'membership', idx: 0 },
+    { frag: 'EMEA',                                    sec: 'membership', idx: 1 },
+    { frag: 'Community',                               sec: 'membership', idx: 2 },
+    { frag: 'Audience',                                sec: 'membership', idx: 3 },
+    { frag: 'CL attendance',                           sec: 'membership', idx: 4 },
+    { frag: 'Raise 1M',                                sec: 'endowment',  idx: 0 },
+    { frag: 'Raise 1m',                                sec: 'endowment',  idx: 0 },
+    { frag: 'Spark',                                   sec: 'education',  idx: 0 },
+    { frag: 'Destinaitor',                             sec: 'education',  idx: 1 },
+    { frag: 'Launch global sustainability',            sec: 'education',  idx: 2 },
+    { frag: 'C4C Advisory Board',                      sec: 'education',  idx: 3 },
+    { frag: 'Learning: 2,000',                         sec: 'education',  idx: 4 },
+    { frag: 'Other Products',                          sec: 'education',  idx: 5 },
+    { frag: 'Turnover',                                sec: 'internal',   idx: 0 },
+    { frag: 'Engagement',                              sec: 'internal',   idx: 1 },
+    { frag: 'Data & Technology',                       sec: 'internal',   idx: 2 },
+  ];
 
+  // For financial section, we need both goal row AND actual row
+  // Build a quick lookup of all rows first
+  const rowByName = {};
   rows.forEach(row => {
-    const rawWeight = parseFloat(row[WEIGHT_COL]);
-    const rawName   = (row[NAME_COL] || '').trim();
-    const rawGoal   = (row[GOAL_COL] || '').toString().trim();
-    const rawYtd    = (row[YTD_COL]  || '').toString().trim();
-    const rawSrc    = (row[SRC_COL]  || '').trim();
-
-    // Section header row: has a weight value 0.05-0.45 and a name
-    if (!isNaN(rawWeight) && rawWeight >= 0.05 && rawWeight <= 0.45) {
-      sectionIdx++;
-      if (sectionOrder[sectionIdx]) {
-        parsed.push({ sectionId: sectionOrder[sectionIdx], metrics: [] });
-      }
-      return;
-    }
-
-    // First rows before any section header belong to Financial (index 0)
-    if (sectionIdx === -1 && (rawName || rawGoal)) {
-      sectionIdx = 0;
-      parsed.push({ sectionId: 'financial', metrics: [] });
-    }
-
-    // Metric row - must have a name or a goal/ytd value
-    if (parsed.length && (rawName || rawGoal || rawYtd)) {
-      const cleanName = rawName.replace(/^[•\s\-]+/, '').trim();
-      // Skip rows that have a name but no goal AND no ytd - these are sub-headers
-      if (cleanName && !rawGoal && !rawYtd) return;
-      if (!cleanName && !rawGoal && !rawYtd) return; // skip blank rows
-
-      // Parse numeric YTD
-      let ytdNum = null;
-      let ytdLabel = rawYtd;
-      if (rawYtd && rawYtd !== '?' && rawYtd !== '' && !isNaN(parseFloat(rawYtd))) {
-        ytdNum = parseFloat(rawYtd);
-        // Format nicely - round all decimals to max 2 places
-        if (ytdNum >= 1000000) ytdLabel = '$' + (ytdNum/1000000).toFixed(2) + 'M';
-        else if (ytdNum >= 1000) ytdLabel = Math.round(ytdNum).toLocaleString();
-        else if (rawYtd.includes('.') && ytdNum < 1) ytdLabel = parseFloat((ytdNum * 100).toFixed(2)) + '%';
-        else if (ytdNum % 1 !== 0) ytdLabel = parseFloat(ytdNum.toFixed(2)).toString();
-        else ytdLabel = ytdNum.toString();
-      }
-
-      // Parse numeric goal
-      let goalNum = null;
-      if (rawGoal && !isNaN(parseFloat(rawGoal))) {
-        goalNum = parseFloat(rawGoal);
-      }
-
-      parsed[parsed.length - 1].metrics.push({
-        name:   cleanName,
-        goal:   goalNum,
-        ytd:    ytdNum,
-        yl:     ytdLabel || rawYtd || null,
-        gl:     rawGoal  || null,
-        source: rawSrc
-      });
-    }
+    const name = (row[NAME_COL] || '').trim();
+    if (name) rowByName[name] = row;
   });
 
-  return parsed;
+  const updates = {};
+
+  rows.forEach(row => {
+    const rawName = (row[NAME_COL] || '').trim();
+    const rawGoal = (row[GOAL_COL] || '').toString().trim();
+    const rawYtd  = (row[YTD_COL]  || '').toString().trim();
+
+    NAME_MAP.forEach(({ frag, sec, idx, ytdFrom }) => {
+      if (!rawName.includes(frag)) return;
+      const key = sec + '_' + idx;
+      if (updates[key]) return; // first match wins for goal row
+
+      // Parse goal
+      let goalNum = null;
+      if (rawGoal && !isNaN(parseFloat(rawGoal))) goalNum = parseFloat(rawGoal);
+
+      // Parse YTD - if this is a goal row with a separate actual row, use that
+      let ytdSource = rawYtd;
+      if (ytdFrom) {
+        const actualRow = Object.entries(rowByName).find(([k]) => k.includes(ytdFrom.split(' ').slice(-3).join(' ')));
+        if (actualRow) ytdSource = (actualRow[1][YTD_COL] || '').toString().trim();
+      }
+
+      let ytdNum = null, ytdLabel = ytdSource;
+      if (ytdSource && !ytdSource.includes('?') && ytdSource !== '' && !isNaN(parseFloat(ytdSource))) {
+        ytdNum = parseFloat(ytdSource);
+        // Convert decimals < 1 to percentages for internal metrics
+        if (ytdNum > 0 && ytdNum < 1 && sec === 'internal') {
+          ytdNum = parseFloat((ytdNum * 100).toFixed(2));
+          ytdLabel = ytdNum + '%';
+        } else if (ytdNum >= 1000000) {
+          ytdLabel = '$' + (ytdNum/1000000).toFixed(2) + 'M';
+        } else if (ytdNum >= 1000) {
+          ytdLabel = Math.round(ytdNum).toLocaleString();
+        } else if (ytdNum % 1 !== 0) {
+          ytdLabel = parseFloat(ytdNum.toFixed(2)).toString();
+        } else {
+          ytdLabel = ytdNum.toString();
+        }
+      }
+
+      updates[key] = { ytd: ytdNum, yl: ytdLabel || ytdSource || null, goal: goalNum };
+    });
+  });
+
+  // Convert to section array format
+  const sectionIds = ['financial','membership','endowment','education','internal'];
+  return sectionIds.map(secId => {
+    const metrics = [];
+    for (let i = 0; i < 10; i++) {
+      const upd = updates[secId + '_' + i];
+      if (upd === undefined) break;
+      metrics.push(upd);
+    }
+    return { sectionId: secId, metrics };
+  });
 }
 
 async function tryLiveData() {
