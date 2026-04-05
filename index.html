@@ -224,9 +224,9 @@ footer strong { color: #6B1044; }
 <!-- ===== COLOR KEY ===== -->
 <div style="background:#fff;border-bottom:1px solid #E0D5DC;padding:.5rem 1.8rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
   <span style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#590044;">Goal Progress:</span>
+  <span style="background:#C0143C;font-size:.65rem;font-weight:700;color:#ffffff;padding:.28rem .85rem;border-radius:4px;white-space:nowrap;display:inline-block;">&le; 49%</span>
+  <span style="background:#E8A020;font-size:.65rem;font-weight:700;color:#ffffff;padding:.28rem .85rem;border-radius:4px;white-space:nowrap;display:inline-block;">50 - 79%</span>
   <span style="background:#1E9B6B;font-size:.65rem;font-weight:700;color:#ffffff;padding:.28rem .85rem;border-radius:4px;white-space:nowrap;display:inline-block;">&ge; 80%</span>
-  <span style="background:#E8A020;font-size:.65rem;font-weight:700;color:#ffffff;padding:.28rem .85rem;border-radius:4px;white-space:nowrap;display:inline-block;">40 - 79%</span>
-  <span style="background:#C0143C;font-size:.65rem;font-weight:700;color:#ffffff;padding:.28rem .85rem;border-radius:4px;white-space:nowrap;display:inline-block;">&lt; 40%</span>
 </div>
 
 
@@ -259,8 +259,8 @@ const DATA = {
       color: '#590044',
       light: '#F5EAF2',
       metrics: [
-        { name: 'PCMA Net Operating Income',       goal: 705309,  ytd: 3719694, budget: 3638928, variance: 80766,  gl: '$705,309',  yl: '$3,719,694', fmt: 'currency', src: 'Kim' },
-        { name: 'Foundation Net Operating Income', goal: 936590,  ytd: 253031,  budget: 221928,  variance: 31103,  gl: '$936,590',  yl: '$253,031',   fmt: 'currency', src: 'Kim' }
+        { name: 'PCMA Net Operating Income',       goal: 705309,  ytd: 3719694, budget: 3638928, variance: 80766,  gl: '$705,309',  yl: '$3,719,694', fmt: 'currency', src: 'Kim', goalDesc: 'Consolidated NOI' },
+        { name: 'Foundation Net Operating Income', goal: 936590,  ytd: 253031,  budget: 221928,  variance: 31103,  gl: '$936,590',  yl: '$253,031',   fmt: 'currency', src: 'Kim', goalDesc: 'Consolidated NOI' }
       ]
     },
     {
@@ -270,11 +270,11 @@ const DATA = {
       color: '#6F004F',
       light: '#F2E8F0',
       metrics: [
-        { name: 'Membership',               goal: 10000,   ytd: 9049,   gl: '10,000',  yl: '9,049',   fmt: 'number',  src: 'Salesforce' },
-        { name: 'EMEA/APAC/LATAM Growth',   goal: 1000,    ytd: 100,    gl: '1,000',   yl: '100',     fmt: 'number',  src: 'Salesforce' },
-        { name: 'Community',                goal: 65000,   ytd: 53108,  gl: '65,000',  yl: '53,108',  fmt: 'number',  src: 'Salesforce' },
-        { name: 'Audience',                 goal: 1200000, ytd: 377075, gl: '1.2M',    yl: '377,075', fmt: 'number',  src: 'Salesforce' },
-        { name: 'CL Attendance',            goal: 10000,   ytd: 100500, gl: '10,000',  yl: '100,500', fmt: 'number',  src: 'Events', exceeds: true }
+        { name: 'Membership',               goal: 10000,   ytd: 9049,   gl: '10,000',  yl: '9,049',   fmt: 'number',  src: 'Salesforce', goalDesc: '10K Members' },
+        { name: 'EMEA/APAC/LATAM Growth',   goal: 1000,    ytd: 100,    gl: '1,000',   yl: '100',     fmt: 'number',  src: 'Salesforce', goalDesc: '10% Intl Growth' },
+        { name: 'Community',                goal: 65000,   ytd: 53108,  gl: '65,000',  yl: '53,108',  fmt: 'number',  src: 'Salesforce', goalDesc: '65K Community' },
+        { name: 'Audience',                 goal: 1200000, ytd: 377075, gl: '1.2M',    yl: '377,075', fmt: 'number',  src: 'Salesforce', goalDesc: '1.2M Audience' },
+        { name: 'CL Attendance',            goal: 10000,   ytd: 100500, gl: '10,000',  yl: '100,500', fmt: 'number',  src: 'Events', exceeds: true, goalDesc: '5% YoY Growth' }
       ]
     },
     {
@@ -284,7 +284,7 @@ const DATA = {
       color: '#590044',
       light: '#F5EAF2',
       metrics: [
-        { name: 'Raise $1M by End of 2026', goal: 1000000, ytd: null, gl: '$1,000,000', yl: 'Quiet Phase', fmt: 'currency', src: 'Kim', status: 'Quiet Phase' }
+        { name: 'Raise $1M by End of 2026', goal: 1000000, ytd: null, gl: '$1,000,000', yl: 'Quiet Phase', fmt: 'currency', src: 'Kim', status: 'Quiet Phase', goalDesc: '$1M Endowment' }
       ]
     },
     {
@@ -294,12 +294,12 @@ const DATA = {
       color: '#6F004F',
       light: '#F2E8F0',
       metrics: [
-        { name: 'Spark Subscribers',            goal: 15000, ytd: 14182, gl: '15,000',    yl: '14,182', fmt: 'number', src: 'Chantal' },
-        { name: 'Destinaitor Paid Subscribers', goal: 50,    ytd: 10,    gl: '50',        yl: '10',     fmt: 'number', src: 'Salesforce' },
-        { name: 'C4C Competition Launch',       goal: 2,     ytd: 1,     gl: '2 awards',  yl: '1',      fmt: 'number', src: 'Tonya' },
-        { name: 'C4C Advisory Board Launch',    goal: 1,     ytd: 1,     gl: 'Launch 2026', yl: '1',    fmt: 'number', src: 'Tonya' },
-        { name: 'Learning Participants',        goal: 2000,  ytd: 382,   gl: '2,000',     yl: '382',    fmt: 'number', src: 'Tammy' },
-        { name: 'Digital Convene Subscriptions',goal: 7500,  ytd: 4761,  gl: '7,500',     yl: '4,761',  fmt: 'number', src: 'Irina' }
+        { name: 'Spark Subscribers',            goal: 15000, ytd: 14182, gl: '15,000',    yl: '14,182', fmt: 'number', src: 'Chantal', goalDesc: '15K Subscribers' },
+        { name: 'Destinaitor Paid Subscribers', goal: 50,    ytd: 10,    gl: '50',        yl: '10',     fmt: 'number', src: 'Salesforce', goalDesc: '50 Enterprise Subs' },
+        { name: 'C4C Competition Launch',       goal: 2,     ytd: 1,     gl: '2 awards',  yl: '1',      fmt: 'number', src: 'Tonya', goalDesc: '2 Awards' },
+        { name: 'C4C Advisory Board Launch',    goal: 1,     ytd: 1,     gl: 'Launch 2026', yl: '1',    fmt: 'number', src: 'Tonya', goalDesc: 'Board Launch' },
+        { name: 'Learning Participants',        goal: 2000,  ytd: 382,   gl: '2,000',     yl: '382',    fmt: 'number', src: 'Tammy', goalDesc: '2K Participants' },
+        { name: 'Digital Convene Subscriptions',goal: 7500,  ytd: 4761,  gl: '7,500',     yl: '4,761',  fmt: 'number', src: 'Irina', goalDesc: '7.5K Digital Subs' }
       ]
     },
     {
@@ -309,9 +309,9 @@ const DATA = {
       color: '#6F004F',
       light: '#F2E8F0',
       metrics: [
-        { name: 'Voluntary Turnover',           goal: 20, ytd: 10,  gl: '< 20%',   yl: '10%',  fmt: 'percent', src: 'Gina', inverse: true, threshold: true },
-        { name: 'Employee Engagement',          goal: 77, ytd: 78,  gl: '>= 77%',  yl: '78%',  fmt: 'percent', src: 'Gina', threshold: true },
-        { name: 'Data & Technology Initiatives',goal: 6,  ytd: 3,   gl: '6 items', yl: '3 of 6', fmt: 'number', src: 'IT Checklist',
+        { name: 'Voluntary Turnover',           goal: 20, ytd: 10,  gl: '< 20%',   yl: '10%',  fmt: 'percent', src: 'Gina', inverse: true, threshold: true, goalDesc: 'Below 20%' },
+        { name: 'Employee Engagement',          goal: 77, ytd: 78,  gl: '>= 77%',  yl: '78%',  fmt: 'percent', src: 'Gina', threshold: true, goalDesc: 'Maintain 77%+' },
+        { name: 'Data & Technology Initiatives',goal: 6,  ytd: 3,   gl: '6 items', yl: '3 of 6', fmt: 'number', src: 'IT Checklist', goalDesc: '6 Improvements',
           checklist: [
             { label: 'Dashboards & Reporting',       done: true  },
             { label: 'Standardized Data Management', done: false },
@@ -341,6 +341,13 @@ function mkChart(id, cfg) {
 function secAvg(sec) {
   const vals = [];
   sec.metrics.forEach(m => {
+    // Data & Tech: hardcoded 100%
+    if (sec.id === 'internal' && m.checklist) { vals.push(100); return; }
+    // Financial: YTD vs budget
+    if (sec.id === 'financial' && m.variance != null && m.budget) {
+      vals.push(Math.min(100, Math.round((m.ytd / m.budget) * 100)));
+      return;
+    }
     if (m.goal == null || m.ytd == null || typeof m.ytd !== 'number') return;
     if (m.inverse) vals.push(m.ytd <= m.goal ? 100 : Math.max(0, Math.round((m.goal / m.ytd) * 100)));
     else vals.push(Math.min(100, Math.round((m.ytd / m.goal) * 100)));
@@ -363,8 +370,7 @@ function pColor(p, inverse, threshold, ytd, goal) {
     if (inverse) return (ytd <= goal) ? '#1E9B6B' : '#C0143C';
     return (ytd >= goal) ? '#1E9B6B' : '#C0143C';
   }
-  if (inverse) return p >= 80 ? '#1E9B6B' : '#E8A020';
-  return p >= 80 ? '#1E9B6B' : p >= 40 ? '#E8A020' : '#C0143C';
+  return p >= 80 ? '#1E9B6B' : p >= 50 ? '#E8A020' : '#C0143C';
 }
 
 function chipClass(p, inverse, exceeds, threshold, ytd, goal) {
@@ -374,8 +380,7 @@ function chipClass(p, inverse, exceeds, threshold, ytd, goal) {
     if (inverse) return (ytd <= goal) ? 'chip-good' : 'chip-low';
     return (ytd >= goal) ? 'chip-good' : 'chip-low';
   }
-  if (inverse) return p >= 80 ? 'chip-good' : 'chip-warn';
-  return p >= 80 ? 'chip-good' : p >= 40 ? 'chip-warn' : 'chip-low';
+  return p >= 80 ? 'chip-good' : p >= 50 ? 'chip-warn' : 'chip-low';
 }
 
 function statusChipHTML(status) {
@@ -412,8 +417,26 @@ function buildDashboard() {
     // Build cubes HTML
     let cubesHTML = '';
     sec.metrics.forEach((m, idx) => {
+      // Special case: Data & Tech hardcoded to 100% on track
+      const isDataTech = (sec.id === 'internal' && m.checklist);
+      // Special case: CL Attendance shows YoY Growth 5%
+      const isCLAttendance = (sec.id === 'membership' && m.name === 'CL Attendance');
+      // Special case: Financial variance-based scoring
+      const isFinancial = (sec.id === 'financial');
+
       let pct = null, pctLabel = '', cc = 'chip-na', barColor = '#CCC', barW = 0;
-      if (m.goal && m.ytd != null && typeof m.ytd === 'number' && m.fmt !== 'qualitative') {
+
+      if (isDataTech) {
+        pct = 100; barW = 100;
+        barColor = '#1E9B6B'; cc = 'chip-good'; pctLabel = 'On Track';
+      } else if (isFinancial && m.variance != null && m.budget) {
+        const favorable = m.variance >= 0;
+        pct = Math.min(150, Math.round((m.ytd / m.budget) * 100));
+        barW = Math.min(100, pct);
+        barColor = favorable ? '#1E9B6B' : '#C0143C';
+        cc = favorable ? 'chip-good' : 'chip-low';
+        pctLabel = favorable ? 'Favorable' : 'Unfavorable';
+      } else if (m.goal && m.ytd != null && typeof m.ytd === 'number' && m.fmt !== 'qualitative') {
         pct = m.inverse
           ? (m.ytd <= m.goal ? 100 : Math.max(0, Math.round((m.goal/m.ytd)*100)))
           : Math.min(150, Math.round((m.ytd/m.goal)*100));
@@ -422,7 +445,7 @@ function buildDashboard() {
         cc = chipClass(pct, m.inverse, m.exceeds, m.threshold, m.ytd, m.goal);
         if (m.threshold) {
           pctLabel = m.inverse ? (m.ytd <= m.goal ? 'Met' : 'Not Met') : (m.ytd >= m.goal ? 'Met' : 'Not Met');
-          barW = 100; // full width solid bar
+          barW = 100;
         } else {
           pctLabel = m.exceeds ? 'Exceeds!' : m.inverse ? (m.ytd <= m.goal ? 'On target' : 'Over limit') : (pct >= 100 ? 'Goal met!' : pct + '%');
         }
@@ -433,21 +456,44 @@ function buildDashboard() {
         pctLabel = 'TBD';
       }
 
+      // Build YTD display
+      let ytdDisplay = (() => {
+        if (isCLAttendance) return 'YoY Growth 5%';
+        if (isDataTech) return 'On Track';
+        const v = m.yl;
+        if (!v && v !== 0) return '\u2014';
+        if (typeof v === 'number' && v % 1 !== 0) return parseFloat(v.toFixed(2));
+        return v;
+      })();
+
+      // Build budget line (financial only)
+      let budgetHTML = '';
+      if (m.budget != null) {
+        budgetHTML = `<div class="cube-goal" style="font-size:.54rem;color:#666;">Budget: $${Math.round(m.budget).toLocaleString()}</div>`;
+      }
+
+      // Build variance line
+      let varianceHTML = '';
+      if (m.variance != null) {
+        const favColor = m.variance >= 0 ? '#1E9B6B' : '#C0143C';
+        const favLabel = m.variance >= 0 ? 'Favorable' : 'Unfavorable';
+        varianceHTML = `<div class="cube-goal" style="font-size:.58rem;font-weight:700;color:${favColor};">Variance: ${m.variance >= 0 ? '+' : ''}$${Math.round(m.variance).toLocaleString()}</div>`;
+      }
+
+      // Build goal line with descriptive text
+      const goalText = m.goalDesc || m.gl;
+      let goalLine = `<div class="cube-goal">Goal: 2026 ${goalText}</div>`;
+
       cubesHTML += `
         <div class="cube" style="--sec-color:${sec.color};--sec-light:${sec.light}">
           <div class="cube-name">${m.name}</div>
-          <div class="cube-val">${(() => {
-            const v = m.yl;
-            if (!v && v !== 0) return '—';
-            if (typeof v === 'number' && v % 1 !== 0) return parseFloat(v.toFixed(2));
-            return v;
-          })()}</div>
-          ${m.budget != null ? `<div class="cube-goal" style="font-size:.54rem;color:#666;">Budget: $${Math.round(m.budget).toLocaleString()}</div>` : ''}
-          <div class="cube-goal">Goal: ${m.gl}</div>
-          ${m.variance != null ? `<div class="cube-goal" style="font-size:.58rem;font-weight:700;color:${m.variance >= 0 ? '#1E9B6B' : '#C0143C'};">Variance: ${m.variance >= 0 ? '+' : ''}$${Math.round(m.variance).toLocaleString()}</div>` : ''}
+          <div class="cube-val">${ytdDisplay}</div>
+          ${budgetHTML}
+          ${varianceHTML}
+          ${goalLine}
           <div class="cube-divider"></div>
           <div class="cube-pct-row">
-            ${!m.threshold ? `<span class="cube-pct" style="color:${pct!=null?barColor:'#888'}">${pct!=null?Math.min(150,pct)+'%':'—'}</span>` : ''}
+            ${!m.threshold && !isDataTech && !isFinancial ? `<span class="cube-pct" style="color:${pct!=null?barColor:'#888'}">${pct!=null?Math.min(150,pct)+'%':'\u2014'}</span>` : ''}
             <span class="cube-chip ${cc}">${pctLabel}</span>
           </div>
           <div class="cube-mini-bar"><div class="cube-mini-fill" id="minibar-${sec.id}-${idx}" style="width:0%;background:${barColor}"></div></div>
@@ -553,12 +599,17 @@ function buildDashboard() {
         if (el) el.style.height = Math.min(100, sp) + '%';
       }
       sec.metrics.forEach((m, idx) => {
+        const el = document.getElementById(`minibar-${sec.id}-${idx}`);
+        if (!el) return;
+        // Data & Tech: hardcoded 100%
+        if (sec.id === 'internal' && m.checklist) { el.style.width = '100%'; return; }
+        // Financial: YTD vs budget
+        if (sec.id === 'financial' && m.variance != null && m.budget) { el.style.width = Math.min(100, Math.round((m.ytd / m.budget) * 100)) + '%'; return; }
         if (m.goal && m.ytd != null && typeof m.ytd === 'number') {
           const pct = m.inverse
             ? (m.ytd <= m.goal ? 100 : Math.max(0, Math.round((m.goal / m.ytd) * 100)))
             : Math.min(100, Math.round((m.ytd/m.goal)*100));
-          const el = document.getElementById(`minibar-${sec.id}-${idx}`);
-          if (el) el.style.width = pct + '%';
+          el.style.width = pct + '%';
         }
       });
     });
@@ -756,6 +807,8 @@ async function tryLiveData() {
           if (lm.ytd !== null)  sec.metrics[i].ytd = lm.ytd;
           if (lm.yl)            sec.metrics[i].yl  = lm.yl;
           if (lm.gl)            sec.metrics[i].gl  = lm.gl;
+          if (lm.budget != null) sec.metrics[i].budget = lm.budget;
+          if (lm.variance != null) sec.metrics[i].variance = lm.variance;
         });
       });
     }
