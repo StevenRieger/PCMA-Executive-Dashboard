@@ -481,12 +481,11 @@ function buildDashboard() {
       }
 
       // Build goal line with descriptive text
-      const goalText = m.goalDesc || m.gl;
-      let goalLine = `<div class="cube-goal">Goal: 2026 ${goalText}</div>`;
+      let goalLine = `<div class="cube-goal">2026 Goal: ${m.gl}</div>`;
 
       cubesHTML += `
         <div class="cube" style="--sec-color:${sec.color};--sec-light:${sec.light}">
-          <div class="cube-name">2026 Goal: ${m.gl}</div>
+          <div class="cube-name">${m.name}</div>
           <div class="cube-val">${ytdDisplay}</div>
           ${budgetHTML}
           ${varianceHTML}
