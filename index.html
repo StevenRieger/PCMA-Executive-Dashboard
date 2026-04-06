@@ -410,7 +410,7 @@ function buildDashboard() {
   const main = document.getElementById('mainContent');
   main.innerHTML = '';
 
-  DATA.sections.forEach(sec => {
+  DATA.sections.forEach((sec, secIdx) => {
     const sp = secAvg(sec);
     const scoreLabel = sp != null ? sp + '% avg' : 'Data pending';
 
@@ -565,7 +565,7 @@ function buildDashboard() {
         </div>
         <div class="cubes-area">
           <div class="sec-label-row" style="border-bottom-color:${sec.color}">
-            <span class="sec-label">${sec.title}</span>
+            <span class="sec-label">2026 Goals: ${secIdx + 1}</span>
             <span class="sec-badge">${scoreLabel}</span>
           </div>
           <div class="cubes-grid">${cubesHTML}</div>
