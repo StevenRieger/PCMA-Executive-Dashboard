@@ -486,11 +486,10 @@ function buildDashboard() {
 
       cubesHTML += `
         <div class="cube" style="--sec-color:${sec.color};--sec-light:${sec.light}">
-          <div class="cube-name">${m.name}</div>
+          <div class="cube-name">2026 Goal: ${m.gl}</div>
           <div class="cube-val">${ytdDisplay}</div>
           ${budgetHTML}
           ${varianceHTML}
-          ${goalLine}
           <div class="cube-divider"></div>
           <div class="cube-pct-row">
             ${!m.threshold && !isDataTech && !isFinancial ? `<span class="cube-pct" style="color:${pct!=null?barColor:'#888'}">${pct!=null?Math.min(150,pct)+'%':'\u2014'}</span>` : ''}
@@ -565,7 +564,7 @@ function buildDashboard() {
         </div>
         <div class="cubes-area">
           <div class="sec-label-row" style="border-bottom-color:${sec.color}">
-            <span class="sec-label">2026 Goals: ${sec.metrics.map(m => m.gl).join(' | ')}</span>
+            <span class="sec-label">${sec.title}</span>
             <span class="sec-badge">${scoreLabel}</span>
           </div>
           <div class="cubes-grid">${cubesHTML}</div>
