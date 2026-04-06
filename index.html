@@ -490,6 +490,7 @@ function buildDashboard() {
           <div class="cube-val">${ytdDisplay}</div>
           ${budgetHTML}
           ${varianceHTML}
+          ${goalLine}
           <div class="cube-divider"></div>
           <div class="cube-pct-row">
             ${!m.threshold && !isDataTech && !isFinancial ? `<span class="cube-pct" style="color:${pct!=null?barColor:'#888'}">${pct!=null?Math.min(150,pct)+'%':'\u2014'}</span>` : ''}
