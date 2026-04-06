@@ -23,7 +23,7 @@ body { font-family: 'Aptos', 'Segoe UI', Arial, sans-serif; background: #F1E7E3;
 }
 .header-left { display: flex; align-items: center; gap: 1.1rem; }
 .pcma-logo { display: flex; align-items: center; gap: 0.55rem; text-decoration: none; }
-.pcma-logo svg { height: 38px; width: auto; }
+.pcma-logo img { height: 38px; width: auto; }
 .pcma-wordmark { font-size: 1.55rem; font-weight: 900; color: #fff; letter-spacing: 0.04em; line-height: 1; }
 .header-divider { width: 1px; height: 36px; background: rgba(255,255,255,0.25); }
 .header-titles { line-height: 1.25; }
@@ -176,7 +176,7 @@ footer strong { color: #6B1044; }
   body { overflow-x: hidden; }
   .header { padding: .55rem .9rem; flex-wrap: wrap; gap: .4rem; }
   .header-left { gap: .5rem; flex: 1; min-width: 0; }
-  .pcma-logo svg { height: 26px; }
+  .pcma-logo img { height: 26px; }
   .pcma-wordmark { font-size: 1.1rem; }
   .header-divider { display: none; }
   .header-title { font-size: .75rem; }
@@ -565,7 +565,7 @@ function buildDashboard() {
         </div>
         <div class="cubes-area">
           <div class="sec-label-row" style="border-bottom-color:${sec.color}">
-            <span class="sec-label">2026 Goals: ${secIdx + 1}</span>
+            <span class="sec-label">2026 Goals: ${sec.metrics.map(m => m.gl).join(' | ')}</span>
             <span class="sec-badge">${scoreLabel}</span>
           </div>
           <div class="cubes-grid">${cubesHTML}</div>
