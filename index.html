@@ -251,6 +251,7 @@ const DATA_URL = 'dashboard_data.json';
 // =======================================================
 const DATA = {
   generated_at: 'Mar 24, 2026 10:42',
+  asOf: 'February 2026',
   sections: [
     {
       id: 'financial',
@@ -258,6 +259,7 @@ const DATA = {
       weight: 20,
       color: '#590044',
       light: '#F5EAF2',
+      asOf: 'February 2026',
       metrics: [
         { name: 'PCMA Net Operating Income',       goal: 705309,  ytd: 3719694, budget: 3638928, variance: 80766,  gl: '$705,309',  yl: '$3,719,694', fmt: 'currency', src: 'Kim', goalDesc: 'Consolidated NOI' },
         { name: 'Foundation Net Operating Income', goal: 936590,  ytd: 253031,  budget: 221928,  variance: 31103,  gl: '$936,590',  yl: '$253,031',   fmt: 'currency', src: 'Kim', goalDesc: 'Consolidated NOI' }
@@ -330,6 +332,7 @@ const DATA = {
 // HELPERS
 // =======================================================
 const charts = {};
+function usd(n) { const r = Math.round(n); return (r < 0 ? '-$' : '$') + Math.abs(r).toLocaleString(); }
 function killChart(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
 function mkChart(id, cfg) {
   killChart(id);
@@ -469,7 +472,7 @@ function buildDashboard() {
       // Build budget line (financial only)
       let budgetHTML = '';
       if (m.budget != null) {
-        budgetHTML = `<div class="cube-goal" style="font-size:.54rem;color:#666;">Budget: $${Math.round(m.budget).toLocaleString()}</div>`;
+        budgetHTML = `<div class="cube-goal" style="font-size:.54rem;color:#666;">Budget: ${usd(m.budget)}</div>`;
       }
 
       // Build variance line
@@ -477,7 +480,7 @@ function buildDashboard() {
       if (m.variance != null) {
         const favColor = m.variance >= 0 ? '#1E9B6B' : '#C0143C';
         const favLabel = m.variance >= 0 ? 'Favorable' : 'Unfavorable';
-        varianceHTML = `<div class="cube-goal" style="font-size:.58rem;font-weight:700;color:${favColor};">Variance: ${m.variance >= 0 ? '+' : ''}$${Math.round(m.variance).toLocaleString()}</div>`;
+        varianceHTML = `<div class="cube-goal" style="font-size:.58rem;font-weight:700;color:${favColor};">Variance: ${m.variance >= 0 ? '+' : ''}${usd(m.variance)}</div>`;
       }
 
       // Build goal line with descriptive text
@@ -501,7 +504,7 @@ function buildDashboard() {
 
     // Detail panel content
     let goalsHTML = '<div class="col-hd">2026 Annual Goal</div>';
-    let actualsHTML = `<div class="col-hd act" style="color:${sec.color};border-bottom-color:${sec.color}">As of February 2026</div>`;
+    let actualsHTML = `<div class="col-hd act" style="color:${sec.color};border-bottom-color:${sec.color}">As of ${sec.asOf || DATA.asOf}</div>`;
     let clHTML = '';
     const srcs = [...new Set(sec.metrics.map(m => m.src).filter(Boolean))];
 
@@ -684,102 +687,89 @@ function buildDetailCharts(secId) {
 // =======================================================
 // =======================================================
 // =======================================================
-// EXCEL ROW PARSER - name-based matching (robust to row additions)
+// EXCEL ROW PARSER - cell-reference matching (sheet row + column letter)
 // =======================================================
+// Sheet row of the Excel table's header. Power Automate sends the data rows in
+// sheet order, so data row N of the JSON is sheet row SHEET_HEADER_ROW + 1 + N.
+const SHEET_HEADER_ROW = 1;
+
+// Where each metric lives in the sheet. Column letters follow the table's column
+// order (A = weight, B = name, C = GOAL, D = YTD). If rows are inserted, deleted,
+// or sorted in the sheet, update these references to match.
+const CELL_MAP = [
+  { sec: 'financial',  idx: 0, goal: 'C2',  ytd: 'D4',  budget: 'D3', variance: 'D5', asOf: 'B4' }, // PCMA NOI
+  { sec: 'financial',  idx: 1, goal: 'C6',  ytd: 'D8',  budget: 'D7', variance: 'D9', asOf: 'B8' }, // Foundation NOI
+  { sec: 'membership', idx: 0, goal: 'C11', ytd: 'D11' }, // Membership
+  { sec: 'membership', idx: 1, goal: 'C12', ytd: 'D12' }, // EMEA/APAC/LATAM
+  { sec: 'membership', idx: 2, goal: 'C13', ytd: 'D13' }, // Community
+  { sec: 'membership', idx: 3, goal: 'C14', ytd: 'D14' }, // Audience
+  { sec: 'membership', idx: 4, goal: 'C15', ytd: 'D15' }, // CL attendance
+  { sec: 'endowment',  idx: 0, goal: 'C17', ytd: 'D17' }, // Raise $1M
+  { sec: 'education',  idx: 0, goal: 'C19', ytd: 'D19' }, // Spark
+  { sec: 'education',  idx: 1, goal: 'C20', ytd: 'D20' }, // Destinaitor
+  { sec: 'education',  idx: 2, goal: 'C22', ytd: 'D22' }, // C4C competition
+  { sec: 'education',  idx: 3, goal: 'C23', ytd: 'D23' }, // C4C Advisory Board
+  { sec: 'education',  idx: 4, goal: 'C24', ytd: 'D24' }, // Learning
+  { sec: 'education',  idx: 5, goal: 'C25', ytd: 'D25' }, // Digital Convene
+  { sec: 'internal',   idx: 0, goal: 'C27', ytd: 'D27' }, // Turnover
+  { sec: 'internal',   idx: 1, goal: 'C28', ytd: 'D28' }, // Engagement
+  { sec: 'internal',   idx: 2, goal: 'C29', ytd: 'D29' }, // Data & Technology
+];
+
 function parseExcelRows(rows) {
-  const NAME_COL   = 'Financial Results ';
-  const GOAL_COL   = 'GOAL';
-  const YTD_COL    = 'YTD';
+  // Column letters map to the table's columns in order (Power Automate metadata keys excluded)
+  const columns = Object.keys(rows[0] || {}).filter(k => !k.startsWith('@odata') && k !== 'ItemInternalId');
 
-  // Map name fragments to section + metric index
-  const NAME_MAP = [
-    { frag: 'PCMA: Consolidated 2026 Net Operating Income',        sec: 'financial',  idx: 0, actualFrag: 'PCMA: Consolidated February 2026 YTD Net Operating Income Actual', budgetFrag: 'PCMA: Consolidated February 2026 YTD Net Operating Income Budget', varianceFrag: 'PCMA: Consolidated February 2026 YTD Net Operating Income Variance' },
-    { frag: 'Foundation: Consolidated 2026 Net Operating Income',  sec: 'financial',  idx: 1, actualFrag: 'Foundation: Consolidated February 2026 YTD Net Operating Income Actual', budgetFrag: 'Foundation: Consolidated February 2026 YTD Net Operating Income Budget', varianceFrag: 'Foundation: Consolidated February 2026 YTD Net Operating Income Variance' },
-    { frag: 'Membership: 10,000',                      sec: 'membership', idx: 0 },
-    { frag: 'EMEA',                                    sec: 'membership', idx: 1 },
-    { frag: 'Community',                               sec: 'membership', idx: 2 },
-    { frag: 'Audience',                                sec: 'membership', idx: 3 },
-    { frag: 'CL attendance',                           sec: 'membership', idx: 4 },
-    { frag: 'Raise 1M',                                sec: 'endowment',  idx: 0 },
-    { frag: 'Raise 1m',                                sec: 'endowment',  idx: 0 },
-    { frag: 'Spark',                                   sec: 'education',  idx: 0 },
-    { frag: 'Destinaitor',                             sec: 'education',  idx: 1 },
-    { frag: 'Launch global sustainability',            sec: 'education',  idx: 2 },
-    { frag: 'C4C Advisory Board',                      sec: 'education',  idx: 3 },
-    { frag: 'Learning: 2,000',                         sec: 'education',  idx: 4 },
-    { frag: 'Other Products',                          sec: 'education',  idx: 5 },
-    { frag: 'Turnover',                                sec: 'internal',   idx: 0 },
-    { frag: 'Engagement',                              sec: 'internal',   idx: 1 },
-    { frag: 'Data & Technology',                       sec: 'internal',   idx: 2 },
-  ];
-
-  // For financial section, we need both goal row AND actual row
-  // Build a quick lookup of all rows first
-  const rowByName = {};
-  rows.forEach(row => {
-    const name = (row[NAME_COL] || '').trim();
-    if (name) rowByName[name] = row;
-  });
+  function cell(ref) {
+    const m = /^([A-Z]+)(\d+)$/.exec(ref || '');
+    if (!m) return '';
+    const col = [...m[1]].reduce((n, ch) => n * 26 + ch.charCodeAt(0) - 64, 0) - 1;
+    const row = rows[Number(m[2]) - SHEET_HEADER_ROW - 1];
+    if (!row || !columns[col]) { console.warn('Dashboard: no data at cell', ref); return ''; }
+    return (row[columns[col]] ?? '').toString().trim();
+  }
+  const toNum = s => { const n = parseFloat(s); return isNaN(n) ? null : n; };
 
   const updates = {};
 
-  rows.forEach(row => {
-    const rawName = (row[NAME_COL] || '').trim();
-    const rawGoal = (row[GOAL_COL] || '').toString().trim();
-    const rawYtd  = (row[YTD_COL]  || '').toString().trim();
+  CELL_MAP.forEach(map => {
+    const { sec, idx } = map;
+    const goalNum = toNum(cell(map.goal));
+    const ytdSource = cell(map.ytd);
+    const budgetNum = map.budget ? toNum(cell(map.budget)) : null;
+    const varianceNum = map.variance ? toNum(cell(map.variance)) : null;
+    // "PCMA: Consolidated August 2026 YTD Net Operating Income Actual" -> "August 2026"
+    const asOfMatch = map.asOf ? /\b((?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+\d{4})\b/i.exec(cell(map.asOf)) : null;
+    if (map.asOf && !asOfMatch) console.warn('Dashboard: no month found in cell', map.asOf);
 
-    NAME_MAP.forEach((map) => { const { frag, sec, idx } = map;
-      if (!rawName.includes(frag)) return;
-      const key = sec + '_' + idx;
-      if (updates[key]) return; // first match wins for goal row
-
-      // Parse goal
-      let goalNum = null;
-      if (rawGoal && !isNaN(parseFloat(rawGoal))) goalNum = parseFloat(rawGoal);
-
-      // Parse YTD - look up actual, budget, variance rows by exact fragment
-      let ytdSource = rawYtd;
-      let budgetNum = null, varianceNum = null;
-      if (map.actualFrag) {
-        const actualRow = rowByName[map.actualFrag];
-        if (actualRow) ytdSource = (actualRow[YTD_COL] || '').toString().trim();
-        const budgetRow = rowByName[map.budgetFrag];
-        if (budgetRow) budgetNum = parseFloat((budgetRow[YTD_COL] || '').toString().trim()) || null;
-        const varianceRow = rowByName[map.varianceFrag];
-        if (varianceRow) varianceNum = parseFloat((varianceRow[YTD_COL] || '').toString().trim()) || null;
+    let ytdNum = null, ytdLabel = ytdSource;
+    if (ytdSource && !ytdSource.includes('?') && !isNaN(parseFloat(ytdSource))) {
+      ytdNum = parseFloat(ytdSource);
+      if (sec === 'financial') {
+        ytdLabel = usd(ytdNum);
+      // Convert decimals < 1 to percentages for internal metrics
+      } else if (ytdNum > 0 && ytdNum < 1 && sec === 'internal') {
+        ytdNum = parseFloat((ytdNum * 100).toFixed(2));
+        ytdLabel = ytdNum + '%';
+      } else if (ytdNum >= 1000000) {
+        ytdLabel = '$' + (ytdNum/1000000).toFixed(2) + 'M';
+      } else if (ytdNum >= 1000) {
+        ytdLabel = Math.round(ytdNum).toLocaleString();
+      } else if (ytdNum % 1 !== 0) {
+        ytdLabel = parseFloat(ytdNum.toFixed(2)).toString();
+      } else {
+        ytdLabel = ytdNum.toString();
       }
+    }
 
-      let ytdNum = null, ytdLabel = ytdSource;
-      if (ytdSource && !ytdSource.includes('?') && ytdSource !== '' && !isNaN(parseFloat(ytdSource))) {
-        ytdNum = parseFloat(ytdSource);
-        // Convert decimals < 1 to percentages for internal metrics
-        if (ytdNum > 0 && ytdNum < 1 && sec === 'internal') {
-          ytdNum = parseFloat((ytdNum * 100).toFixed(2));
-          ytdLabel = ytdNum + '%';
-        } else if (ytdNum >= 1000000) {
-          ytdLabel = '$' + (ytdNum/1000000).toFixed(2) + 'M';
-        } else if (ytdNum >= 1000) {
-          ytdLabel = Math.round(ytdNum).toLocaleString();
-        } else if (ytdNum % 1 !== 0) {
-          ytdLabel = parseFloat(ytdNum.toFixed(2)).toString();
-        } else {
-          ytdLabel = ytdNum.toString();
-        }
-      }
-
-      updates[key] = { ytd: ytdNum, yl: ytdLabel || ytdSource || null, goal: goalNum, budget: budgetNum, variance: varianceNum };
-    });
+    updates[sec + '_' + idx] = { ytd: ytdNum, yl: ytdLabel || null, goal: goalNum, budget: budgetNum, variance: varianceNum, asOf: asOfMatch ? asOfMatch[1] : null };
   });
 
-  // Convert to section array format
+  // Convert to section array format (null keeps a slot so later metrics stay aligned)
   const sectionIds = ['financial','membership','endowment','education','internal'];
   return sectionIds.map(secId => {
     const metrics = [];
-    for (let i = 0; i < 10; i++) {
-      const upd = updates[secId + '_' + i];
-      if (upd === undefined) break;
-      metrics.push(upd);
-    }
+    for (let i = 0; i < 10; i++) metrics.push(updates[secId + '_' + i] || null);
     return { sectionId: secId, metrics };
   });
 }
@@ -801,15 +791,19 @@ async function tryLiveData() {
       parsed.forEach(liveSec => {
         const sec = DATA.sections.find(s => s.id === liveSec.sectionId);
         if (!sec) return;
+        sec.asOf = null; // falls back to the refresh date unless a month is found below
         liveSec.metrics.forEach((lm, i) => {
-          if (!sec.metrics[i]) return;
+          if (!lm || !sec.metrics[i]) return;
           if (lm.ytd !== null)  sec.metrics[i].ytd = lm.ytd;
           if (lm.yl)            sec.metrics[i].yl  = lm.yl;
           if (lm.gl)            sec.metrics[i].gl  = lm.gl;
           if (lm.budget != null) sec.metrics[i].budget = lm.budget;
           if (lm.variance != null) sec.metrics[i].variance = lm.variance;
+          if (lm.asOf)          sec.asOf = lm.asOf;
         });
       });
+      // Non-financial sections are as of the refresh date ("Sep 24, 2026 11:48" -> "Sep 24, 2026")
+      if (live.generated_at) DATA.asOf = live.generated_at.replace(/\s+\d{1,2}:\d{2}.*$/, '');
     }
     // Handle old sections format (backwards compat)
     else if (live.sections) {

@@ -17,12 +17,12 @@ Open `index.html` directly in a browser, or serve it with any static server (e.g
 **Data flow:**
 1. Hardcoded fallback data lives in the `DATA` constant (line ~252) with five sections: `financial`, `membership`, `endowment`, `education`, `internal`.
 2. On load, `showLoadingState()` runs, then `tryLiveData()` fetches `dashboard_data.json` (generated externally by Power Automate from a SharePoint Excel list).
-3. `parseExcelRows()` (line ~639) maps SharePoint row names to section/metric indices via `NAME_MAP` - this is the critical data-binding layer. When SharePoint column names change, `NAME_MAP` fragments must be updated.
+3. `parseExcelRows()` reads metrics by Excel cell reference via `CELL_MAP` (e.g. PCMA NOI actual = `D4`) - this is the critical data-binding layer. When rows are inserted, deleted, or sorted in the sheet, `CELL_MAP` references must be updated.
 4. `buildDashboard()` and `buildComposite()` re-render the entire UI from the `DATA` object.
 5. Polls every 30 seconds via `setInterval(tryLiveData, 30000)`.
 
 **Key functions:**
-- `parseExcelRows()` - Converts raw SharePoint rows into section updates. Uses name-fragment matching, not positional indexing.
+- `parseExcelRows()` - Converts raw SharePoint rows into section updates. Uses cell references (sheet row + column letter), not row-name text.
 - `buildDashboard()` - Generates all section blocks, cubes, detail panels, and chart canvases.
 - `buildDetailCharts()` - Creates Chart.js bar/progress charts when a section is expanded.
 - `secAvg()` / `compositeScore()` - Calculate weighted progress scores displayed in the header and thermometers.
@@ -35,9 +35,11 @@ Open `index.html` directly in a browser, or serve it with any static server (e.g
 ## Key Conventions
 
 - Section weights (in the `DATA` config) must sum to 100 - they drive the composite score calculation.
-- The `NAME_MAP` in `parseExcelRows()` uses substring matching (`includes()`) against the SharePoint "Financial Results" column. Order matters: first match wins.
-- Financial metrics use a special pattern: the goal row maps to the annual goal, but YTD/budget/variance come from separate named rows (e.g. "PCMA: Consolidated February 2026 YTD Net Operating Income Actual").
+- `CELL_MAP` references are sheet cells. `SHEET_HEADER_ROW` (1) is the table's header row, so JSON `rows[0]` is sheet row 2. Column letters follow the table's column order in the JSON (A = weight, B = name, C = GOAL, D = YTD). Row labels can be renamed freely (e.g. the monthly "February" to "August" relabel), but moving rows requires updating `CELL_MAP`.
+- Financial metrics use a special pattern: YTD actual/budget/variance come from the rows below the goal row (D4/D3/D5), and the "As of <Month> <Year>" detail header is parsed from the actual row's label (B4).
+- Goal cells (C column) are read by the parser but NOT applied by `tryLiveData`; displayed goals come from the hardcoded `DATA` constant.
+- Text-based matching was replaced in Sep 2026 because a monthly label change ("February 2026" to "August 2026") silently broke binding while the Updated timestamp kept changing.
 - Internal metrics with decimal YTD values < 1 are auto-converted to percentages (multiplied by 100).
 - The `dashboard_data.json` file is machine-generated - do not hand-edit it. To change displayed data, modify the `DATA` constant in `index.html` or update the upstream SharePoint list.
 - CORS is a hard architectural constraint for dashboards hosted on external domains - JSON must be served from the same origin (GitHub Pages) rather than SharePoint to avoid cross-origin fetch failures.
-- Excel dashboard data should be parsed by name, not row position, so adding rows does not break the pipeline.
+- Excel dashboard data is parsed by cell reference (user decision, Sep 2026), so renaming row labels does not break the pipeline; adding or moving rows requires a `CELL_MAP` update.
